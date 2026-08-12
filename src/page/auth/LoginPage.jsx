@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Form, Input, message, Spin, Divider } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useNavigate, Link } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+// import { useGoogleLogin } from "@react-oauth/google"; // unused — Google button commented out
 import { request } from "../../util/request";
-import { setAuth } from "../../util/auth";
+// import { setAuth } from "../../util/auth"; // unused — auth handled by ProfileStore
 import { ProfileStore } from "../../store/ProfileStore";
 import { ROLES } from "../../util/useRole";
 import AuthNavbar from "../../components/layout/AuthNavbar";
@@ -30,7 +30,7 @@ const LoginPage = () => {
       return;
     }
     if (res?.access_token) {
-      setAuth(res.access_token, res.user);
+      // setAuth(res.access_token, res.user); // unused — auth handled by ProfileStore
       setProfile({ ...res.user });
       setAccessToken(res.access_token);
       setPermission(res.permission);
@@ -57,15 +57,16 @@ const LoginPage = () => {
     handleAuthSuccess(res);
   };
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      setLoading(true);
-      const res = await request("auth/google/token", "post", { token: tokenResponse.access_token });
-      setLoading(false);
-      handleAuthSuccess(res);
-    },
-    onError: () => message.error("Google login failed. Please try again."),
-  });
+  // Google login — kept for future use when Google button is re-enabled
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     setLoading(true);
+  //     const res = await request("auth/google/token", "post", { token: tokenResponse.access_token });
+  //     setLoading(false);
+  //     handleAuthSuccess(res);
+  //   },
+  //   onError: () => message.error("Google login failed. Please try again."),
+  // });
 
   return (
     <Spin spinning={loading}>
@@ -87,8 +88,12 @@ const LoginPage = () => {
 
           <Form form={form} onFinish={onFinish} layout="vertical">
 
-            <Form.Item name="email" label="Email"
-              rules={[{ required: true }, { type: "email" }]}>
+          <Form.Item 
+            name="email" 
+            label="Email"
+            rules={[
+              { required: true }, 
+            { type: "email" }]}>
               <Input prefix={<UserOutlined />} placeholder="Enter your email" size="large" />
             </Form.Item>
 
@@ -114,7 +119,7 @@ const LoginPage = () => {
 
             <Divider className="!my-4 !text-gray-400 !text-xs">or</Divider>
 
-            <button
+            {/* <button
               type="button"
               onClick={() => googleLogin()}
               className="w-full flex items-center justify-center gap-3 h-11 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-gray-700 font-medium text-sm cursor-pointer"
@@ -126,7 +131,7 @@ const LoginPage = () => {
                 <path fill="#34A853" d="M24 47c5.5 0 10.12-1.82 13.5-4.94l-7.18-5.58c-1.82 1.22-4.15 1.94-6.32 1.94-6.26 0-11.57-4.11-13.28-9.72l-8.16 6.48C7.07 41.52 14.82 47 24 47z"/>
               </svg>
               Continue with Google
-            </button>
+            </button> */}
 
             <p className="text-center text-gray-400 text-sm mt-5">
               Don't have an account?{" "}

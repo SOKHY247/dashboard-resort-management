@@ -5,7 +5,7 @@ import useRole, { ROLES } from "../../util/useRole";
 const getHomeByRole = (role) => {
   if (role === ROLES.RESORT)     return "/resort/dashboard";
   if (role === ROLES.RESTAURANT) return "/restaurant/dashboard";
-  return "/revenue/chart";
+  return "/dashboard";
 };
 
 // Blocks unauthenticated users from accessing dashboard

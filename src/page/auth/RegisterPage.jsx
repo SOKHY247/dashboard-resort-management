@@ -5,26 +5,18 @@ import {
   PhoneOutlined, UploadOutlined,
 } from "@ant-design/icons";
 import { useNavigate, Link } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
 import { request } from "../../util/request";
-import { setAuth } from "../../util/auth";
+// import { useGoogleLogin } from "@react-oauth/google"; // unused — Google button commented out
+// import { setAuth } from "../../util/auth";             // unused — auth handled by ProfileStore
 import { ProfileStore } from "../../store/ProfileStore";
-import { ROLES } from "../../util/useRole";
+// import { ROLES } from "../../util/useRole"; // unused — no role-based redirect on register
 import AuthNavbar from "../../components/layout/AuthNavbar";
 import logoResort from "../../assets/image/LogoResort.jpg";
 import bgRegister from "../../assets/image/BackgroundRegisterPage.jpg";
 
-const getRedirectByRole = (user) => {
-  const role = user?.roles?.[0]?.name;
-  if (role === ROLES.RESORT)     return "/resort/dashboard";
-  if (role === ROLES.RESTAURANT) return "/restaurant/dashboard";
-  return "/dashboard";
-};
-
 const { Option } = Select;
 
 export default function RegisterPage() {
-  const { setProfile, setAccessToken, setPermission } = ProfileStore();
   const [loading, setLoading]   = useState(false);
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
@@ -65,23 +57,8 @@ export default function RegisterPage() {
     handleAuthSuccess(res);
   };
 
-  const googleRegister = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      setLoading(true);
-      const res = await request("auth/google/token", "post", { token: tokenResponse.access_token });
-      setLoading(false);
-      if (res?.errors) { message.error(res.errors.message ?? "Google sign-up failed."); return; }
-      if (res?.access_token) {
-        setAuth(res.access_token, res.user);
-        setProfile({ ...res.user });
-        setAccessToken(res.access_token);
-        setPermission(res.permission ?? null);
-        message.success("Google sign-up successful!");
-        navigate(getRedirectByRole(res.user));
-      }
-    },
-    onError: () => message.error("Google sign-up failed. Please try again."),
-  });
+  // Google register — kept for future use when Google button is re-enabled
+  // const googleRegister = useGoogleLogin({ ... });
 
   return (
     <Spin spinning={loading}>
@@ -102,7 +79,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Google Button */}
-          <button
+          {/* <button
             type="button"
             onClick={() => googleRegister()}
             className="w-full flex items-center justify-center gap-3 h-11 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-gray-700 font-medium text-sm cursor-pointer"
@@ -114,9 +91,9 @@ export default function RegisterPage() {
               <path fill="#34A853" d="M24 47c5.5 0 10.12-1.82 13.5-4.94l-7.18-5.58c-1.82 1.22-4.15 1.94-6.32 1.94-6.26 0-11.57-4.11-13.28-9.72l-8.16 6.48C7.07 41.52 14.82 47 24 47z"/>
             </svg>
             Continue with Google
-          </button>
+          </button> */}
 
-          <Divider className="!my-4 !text-gray-400 !text-xs">or register with email</Divider>
+          {/* <Divider className="!my-4 !text-gray-400 !text-xs">or register with email</Divider> */}
 
           <Form form={form} onFinish={onFinish} layout="vertical" requiredMark={false}>
 

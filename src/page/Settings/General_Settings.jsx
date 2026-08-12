@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { MdSave, MdBusiness, MdLanguage, MdPalette, MdSecurity } from "react-icons/md";
 import { useDarkMode } from "../../util/DarkModeContext";
-import { message } from "antd";
-import { Button } from "antd/es/radio";
+import { message, Button } from "antd";
 
 export default function General_Settings() {
   const dark = useDarkMode();
